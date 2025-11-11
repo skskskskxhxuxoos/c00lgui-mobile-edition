@@ -12,30 +12,54 @@ local frame = Instance.new("Frame")
 	frame.Name = "Frame"
 	frame.Position = UDim2.new(0,3,0.3,0)
 	frame.Size = UDim2.new(0,300,0,400)
-	local dragging = false
-local dragStart, startPos
 
+frame.Active = true
+
+local dragging = false
+local dragStart
+local startPos
+
+local UserInputService = game:GetService("UserInputService")
+
+local function update(input)
+    local delta = input.Position - dragStart
+    frame.Position = UDim2.new(
+        startPos.X.Scale,
+        startPos.X.Offset + delta.X,
+        startPos.Y.Scale,
+        startPos.Y.Offset + delta.Y
+    )
+end
+
+-- Input Began: Start dragging
 frame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragging = true
         dragStart = input.Position
         startPos = frame.Position
         
-        input.Changed:Connect(function()
+        -- Capture the release event
+        local connection
+        connection = input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
                 dragging = false
+                connection:Disconnect() -- Clean up the connection
             end
         end)
     end
 end)
 
+-- Handle input changes
 frame.InputChanged:Connect(function(input)
-    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-        local delta = input.Position - dragStart
-        frame.Position = UDim2.new(
-            startPos.X.Scale, startPos.X.Offset + delta.X,
-            startPos.Y.Scale, startPos.Y.Offset + delta.Y
-        )
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        update(input)
+    end
+end)
+
+-- Alternative method using UserInputService (fixed)
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        update(input)
     end
 end)
 
