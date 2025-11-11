@@ -4,9 +4,6 @@ tef = "SourceSans"
 whit = Color3.new(255/255,255/255,255/255)
 local cka = Instance.new("ScreenGui", game.CoreGui)
 cka.Name= "CoolGui"
-local uiScale = Instance.new("UIScale")
-uiScale.Scale = 0.5
-uiScale.Parent = cka
 local frame = Instance.new("Frame")
 	frame.Parent = cka
 	frame.BackgroundColor3 = blak
@@ -17,8 +14,6 @@ local frame = Instance.new("Frame")
 	frame.Size = UDim2.new(0,300,0,400)
 	local dragging = false
 local dragStart, startPos
-
-local frame = script.Parent
 
 frame.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -30987,3 +30982,7 @@ left.MouseButton1Down:connect(function()FlipPage(-1) end)
 page1.addonl.MouseButton1Down:connect(function()CurrentPage=6 FlipPage(-1) end)
 page5.addonr.MouseButton1Down:connect(function()CurrentPage=0 FlipPage(1) end)
 -----------------------------------------------------------------------------
+
+local uiScale = Instance.new("UIScale")
+uiScale.Scale = 0.5
+uiScale.Parent = cka
